@@ -105,7 +105,7 @@
                "say" say
                "help" help})
 
-;; Command handling
+;; Command handling.
 
 (defn execute
   "Execute a command that is passed to us."
