@@ -62,6 +62,11 @@
   (str "You are carrying:\n"
        (str/join "\n" (seq @player/*inventory*))))
 
+(defn hp
+  "See how many hit points you have left."
+  []
+  (str "You have " player/*hp* " hit points left."))
+
 (defn detect
   "If you have the detector, you can see which room an item is in."
   [item]
@@ -103,7 +108,8 @@
                "detect" detect
                "look" look
                "say" say
-               "help" help})
+               "help" help
+               "hp" hp})
 
 ;; Command handling.
 

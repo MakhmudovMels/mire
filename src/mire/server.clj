@@ -31,11 +31,16 @@
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref (@rooms/rooms :start))
-              player/*inventory* (ref #{})]
+              player/*inventory* (ref #{})
+              player/*hp* 100]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*))
 
+      ;; Debugging output
+      ;; (println player/*name*)
+      ;; (println "Player hp: "  @player/*hp*)
+      (println (str "You have " player/*hp* " hit points left."))
       (println (commands/look)) (print player/prompt) (flush)
 
       (try (loop [input (read-line)]
