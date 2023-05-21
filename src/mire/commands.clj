@@ -30,6 +30,10 @@
          (move-between-refs player/*name*
                             (:inhabitants @player/*current-room*)
                             (:inhabitants target))
+
+         (set! player/*hp* (+ player/*hp* (:hp-change target)))
+         (when (> @player/*hp* 100)
+           (set! player/*hp* 100))
          (ref-set player/*current-room* target)
          (look))
        "You can't go that way."))))
