@@ -9,6 +9,7 @@
            {:name (keyword (.getName file))
             :desc (:desc room)
             :hp-change (:hp-change room)
+            :mark (:mark room)
             :exits (ref (:exits room))
             :items (ref (or (:items room) #{}))
             :inhabitants (ref #{})}})))
