@@ -1,0 +1,4 @@
+{:desc "Вы попали в игровую комнату, в которой стоит диван, телевизор и приставка."
+ :exits {:north :start :west :narrow_room :east :kitchen}
+ :hp-change 0
+ :mark "EMPTY"}

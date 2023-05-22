@@ -1,0 +1,4 @@
+{:desc "Вы оказались в пустой комнате с очень низким потолком. У вас начинает затекать спина."
+ :exits {:north :gas_room :south :minotaur_lair :east :game_room}
+ :hp-change 0
+ :mark "EMPTY"}

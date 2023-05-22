@@ -1,0 +1,5 @@
+{:desc "Упс.. Кажется вы набрели на логово минотавра, лучше бы вам здесь не задерживаться."
+ :exits {:north :narrow_room}
+ :items #{:feces}
+ :hp-change 0
+ :mark "EMPTY"}

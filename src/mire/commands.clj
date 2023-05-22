@@ -12,11 +12,11 @@
 ;; Command functions
 
 (defn look
-  "Get a description of the surrounding environs and its contents."
+  "Получить описание окружающих окрестностей и его содержимого."
   []
   (str (:desc @player/*current-room*)
-       "\nExits: " (keys @(:exits @player/*current-room*)) "\n"
-       (str/join "\n" (map #(str "There is " % " here.\n")
+       "\nВыходы: " (keys @(:exits @player/*current-room*)) "\n"
+       (str/join "\n" (map #(str "Здесь есть: " % ".\n")
                            @(:items @player/*current-room*)))))
 
 (defn move
@@ -30,59 +30,66 @@
          (move-between-refs player/*name*
                             (:inhabitants @player/*current-room*)
                             (:inhabitants target))
-
          (set! player/*hp* (+ player/*hp* (:hp-change target)))
-         (when (> @player/*hp* 100)
+         (when (> player/*hp* 100)
            (set! player/*hp* 100))
+         (when (<= player/*hp* 0)
+           ;(println "loser")
+           (set! player/*status* "loser")
+           )
+         (when (= target-name :win_room)
+           ;(println "winner")
+           (set! player/*status* "winner")
+           )
          (ref-set player/*current-room* target)
          (look))
-       "You can't go that way."))))
+       "Ты не можешь пойти в этом направлении."))))
 
 (defn grab
-  "Pick something up."
+  "Поднять что то."
   [thing]
   (dosync
    (if (rooms/room-contains? @player/*current-room* thing)
      (do (move-between-refs (keyword thing)
                             (:items @player/*current-room*)
                             player/*inventory*)
-         (str "You picked up the " thing "."))
-     (str "There isn't any " thing " here."))))
+         (str "Ты залутал  " thing "."))
+     (str "Здесь нет предмета " thing "."))))
 
 (defn discard
-  "Put something down that you're carrying."
+  "Скинуть предмет."
   [thing]
   (dosync
    (if (player/carrying? thing)
      (do (move-between-refs (keyword thing)
                             player/*inventory*
                             (:items @player/*current-room*))
-         (str "You dropped the " thing "."))
-     (str "You're not carrying a " thing "."))))
+         (str "Ты скинул " thing "."))
+     (str "У тебя нет предмета " thing "."))))
 
 (defn inventory
-  "See what you've got."
+  "Посмтотреть инвентарь."
   []
-  (str "You are carrying:\n"
+  (str "Твой инвентарь:\n"
        (str/join "\n" (seq @player/*inventory*))))
 
 (defn hp
-  "See how many hit points you have left."
+  "Посмотреть количество хэпэшек."
   []
-  (str "You have " player/*hp* " hit points left."))
+  (str "У тебя осталось " player/*hp* " хэпэшек."))
 
 (defn detect
-  "If you have the detector, you can see which room an item is in."
+  "Если у вас есть детектор, вы можете увидеть, в какой комнате находится предмет."
   [item]
   (if (@player/*inventory* :detector)
     (if-let [room (first (filter #((:items %) (keyword item))
                                  (vals @rooms/rooms)))]
-      (str item " is in " (:name room))
-      (str item " is not in any room."))
-    "You need to be carrying the detector for that."))
+      (str item " находится в комнате " (:name room))
+      (str item " такого предмета нигде нет."))
+    "Нельзя читерить."))
 
 (defn say
-  "Say something out loud so everyone in the room can hear."
+  "Скажите что-нибудь вслух, чтобы все в комнате могли услышать."
   [& words]
   (let [message (str/join " " words)]
     (doseq [inhabitant (disj @(:inhabitants @player/*current-room*)
@@ -90,10 +97,10 @@
       (binding [*out* (player/streams inhabitant)]
         (println message)
         (println player/prompt)))
-    (str "You said " message)))
+    (str "Ты бромолчал: " message)))
 
 (defn help
-  "Show available commands and what they do."
+  "Показать доступные команды и то, что они делают."
   []
   (str/join "\n" (map #(str (key %) ": " (:doc (meta (val %))))
                       (dissoc (ns-publics 'mire.commands)
@@ -124,4 +131,4 @@
          (apply (commands command) args))
        (catch Exception e
          (.printStackTrace e (new java.io.PrintWriter *err*))
-         "You can't do that!")))
+         "Неопознанная команда. Для просмотра списка команд введи help")))

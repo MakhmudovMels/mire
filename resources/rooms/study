@@ -1,0 +1,5 @@
+{:desc "Уютная комната со столом и книжным шкафом."
+ :exits {:north :gym :south :kitchen :west :start}
+ :items #{:book}
+ :hp-change 0
+ :mark "EMPTY"}

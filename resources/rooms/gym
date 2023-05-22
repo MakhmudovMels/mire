@@ -1,0 +1,5 @@
+{:desc "Вы оказались в подвальной качалке. Вы попробовали поднять гирю и уронили её себе на ногу. Вы потеряли 10hp"
+ :exits {:south :study :west :damp_room}
+ :items #{:dumbbells}
+ :hp-change -10
+ :mark "HIT"}

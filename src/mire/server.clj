@@ -14,8 +14,6 @@
    (commute (:inhabitants @player/*current-room*)
             disj player/*name*)))
 
-
-
 (defn- get-unique-player-name [name]
   (if (@player/streams name)
     (do (print "Это имя уже используется; попробуй другое: ")
@@ -28,6 +26,12 @@
             *out* (io/writer out)
             *err* (io/writer System/err)]
 
+    (defn close-connection
+      "Close the connection with the current client."
+      []
+      (.close in)
+      (.close out))
+
     ;; We have to nest this in another binding call instead of using
     ;; the one above so *in* and *out* will be bound to the socket
     (print "\nКак я могу тебя называть? ") (flush)
@@ -35,20 +39,29 @@
               player/*current-room* (ref (@rooms/rooms :start))
               player/*inventory* (ref #{})
               player/*hp* 100
+              player/*status* "none"
               ]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*))
 
-      ;; (println (str "You have " player/*hp* " hit points left."))
       (println (commands/look)) (print player/prompt) (flush)
 
       (try (loop [input (read-line)]
              (when input
                (println (commands/execute input))
-               (when (<= player/*hp* 0)
+               (when (= player/*status* "loser")
                  (println "ПОМЕР")
-                 (Thread/sleep 5000)
+                 (Thread/sleep 10000)
+                 (cleanup)
+                 (.close in)
+                 (.close out)
+                 )
+               (when (= player/*status* "winner")
+                 ;(println "Вы обнаружили металлический люк. Вы проползли 500 ярдов по канализационной трубе
+                 ;и увидели свет в конце. Вы победили.")
+                 (Thread/sleep 10000)
+                 (cleanup)
                  (.close in)
                  (.close out)
                  )
@@ -56,6 +69,8 @@
                (print player/prompt) (flush)
                (recur (read-line))))
            (finally (cleanup))))))
+
+
 
 (defn -main
   ([port dir]

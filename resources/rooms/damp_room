@@ -1,0 +1,5 @@
+{:desc "Вы в сырой комнате, заполненной крысами. Одна из них вас укусила. Вы потеряли 10hp"
+ :exits {:south :start :west :art_gallery :east :gym}
+ :hp-change -10
+ :mark "HIT"
+ }
