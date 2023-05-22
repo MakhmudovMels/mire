@@ -1,0 +1,5 @@
+{:desc "Вы попали на кухню и перекусили сэндвичем. Вам прибавилось 5hp"
+ :exits {:north :study :west :game_room}
+ :items #{:beer}
+ :hp-change 5
+ :mark "HILL"}

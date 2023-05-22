@@ -1,0 +1,5 @@
+{:desc "Вы находитесь в комнате, где на стенах висят различные картины. Картины написаны маслом и выглядят очень красиво."
+:exits {:north :win_room :south :gas_room :east :damp_room}
+:items #{:paintbrush}
+:hp-change 0
+:mark "EMPTY"}

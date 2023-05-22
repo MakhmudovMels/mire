@@ -1,2 +1,5 @@
-{:desc "You find yourself in a round room with a pillar in the middle."
- :exits {:north :closet :south :hallway}}
+{:desc "Место спавна, это круглая комната с колонной посередине. Вокруг вас незнакомцы."
+ :exits {:north :damp_room :south :game_room :west :gas_room :east :study}
+ :items #{:turtle}
+ :hp-change 0
+ :mark "EMPTY"}
