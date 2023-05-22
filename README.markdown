@@ -2,6 +2,18 @@
 
 It's a nonviolent MUD. (Multi-User Dungeon)
 
+## What i added to the game
+
+The first step was to add a system for accounting for player health points. Each player initially has 100 health points
+
+After that, rooms were added, the transition to which heals the user or damages him.
+
+Next, the victory condition was implemented by adding a victory room, the transition to which makes the player a winner.
+
+Thus, the task of the players is to save health points and get to the exit
+
+Finally, the number of rooms was increased to eleven
+
 ## Usage
 
 First make sure that you have `java` installed on your
